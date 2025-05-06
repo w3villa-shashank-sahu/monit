@@ -1,0 +1,151 @@
+## Base URL
+All API endpoints are prefixed with the base URL defined in the application constants.
+
+## Authentication
+Most endpoints require authentication using a Bearer token in the Authorization header:
+```
+Authorization: Bearer {token}
+```
+
+## API Endpoints
+
+### 1. User Authentication (Implementation details not fully visible in the provided code)
+
+### 2. Dashboard Data
+**Endpoint**: GET /users/dashboard
+**Description**: Fetches combined parent and children data for the dashboard
+**Authentication**: Required
+**Request**: None (GET request)
+**Response**:
+```json
+{
+  "parent": {
+    "id": "string",
+    "name": "string",
+    "email": "string"
+  },
+  "children": [
+    {
+      "id": "string",
+      "name": "string",
+      "className": "string",
+      "rollNo": "string",
+      "balance": 0.0,
+      "spendingLimit": {
+        "dailyLimit": 0.0,
+        "weeklyLimit": 0.0,
+        "allowedItemsPerDay": {
+          "Monday": ["string"],
+          "Tuesday": ["string"],
+          // Other days of the week...
+        }
+      },
+      "emergency": {
+        "emergencyFundLimit": 0.0,
+        "usedAmountThisMonth": 0.0,
+        "allowedEmergencyItems": ["string"],
+        "lastResetDate": "2025-05-06T00:00:00Z"
+      },
+      "recentPurchases": [
+        {
+          "id": "string",
+          "itemName": "string",
+          "amount": 0.0,
+          "dateTime": "2025-05-06T00:00:00Z",
+          "isEmergency": false,
+          "isTeacherAuthorized": false
+        }
+      ]
+    }
+  ]
+}
+```
+
+### 3. Update Spending Limit
+**Endpoint**: PUT /children/{childId}/spending-limit
+**Description**: Updates a child's spending limit
+**Authentication**: Required
+**Request**:
+```json
+{
+  "dailyLimit": 0.0,
+  "weeklyLimit": 0.0,
+  "allowedItemsPerDay": {
+    "Monday": ["string"],
+    "Tuesday": ["string"],
+    // Other days of the week...
+  }
+}
+```
+**Response**: Status code 200 if successful
+
+### 4. Update Emergency Settings
+**Endpoint**: PUT /children/{childId}/emergency
+**Description**: Updates a child's emergency spending settings
+**Authentication**: Required
+**Request**:
+```json
+{
+  "emergencyFundLimit": 0.0,
+  "allowedEmergencyItems": ["string"]
+}
+```
+**Response**: Status code 200 if successful
+
+### 5. Add Balance
+**Endpoint**: POST /children/{childId}/balance
+**Description**: Adds balance to a child's account
+**Authentication**: Required
+**Request**:
+```json
+{
+  "amount": 0.0
+}
+```
+**Response**:
+```json
+{
+  "newBalance": 0.0
+}
+```
+
+### 6. Get Purchase History
+**Endpoint**: GET /children/{childId}/purchases
+**Description**: Retrieves a child's purchase history
+**Authentication**: Required
+**Request**: None (GET request)
+**Response**:
+```json
+[
+  {
+    "id": "string",
+    "itemName": "string",
+    "amount": 0.0,
+    "dateTime": "2025-05-06T00:00:00Z",
+    "isEmergency": false,
+    "isTeacherAuthorized": false
+  }
+]
+```
+
+### 7. Update Parent Profile
+**Endpoint**: PUT /users/profile
+**Description**: Updates the parent's profile information
+**Authentication**: Required
+**Request**:
+```json
+{
+  "name": "string", // Optional
+  "email": "string" // Optional
+}
+```
+**Response**: Status code 200 if successful
+
+## Error Responses
+All endpoints should return appropriate HTTP status codes. In case of errors, the response should include a message:
+
+```json
+{
+  "error": "Error message describing what went wrong"
+}
+```
