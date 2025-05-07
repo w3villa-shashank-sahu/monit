@@ -65,6 +65,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             ),
           ).then((_) {
             // Navigate to login screen
+            if (!mounted) return;
             context.go(MyRoutes.login);
           });
         }
@@ -164,7 +165,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
                   // Resend OTP
                   TextButton(
-                    onPressed: () => context.go('${MyRoutes.forgotPassword}'),
+                    onPressed: () => context.go(MyRoutes.forgotPassword),
                     child: const Text(
                       'Resend OTP',
                       style: TextStyle(color: Colors.blue),

@@ -12,7 +12,7 @@ class Product {
     required this.name,
     required this.price,
     required this.imageUrl,
-    this.stockQuantity = 0,
+    this.stockQuantity = 100,
     this.forEmergency = false,
     required this.category, // "lunch", "snack", "drink", "stationery"
   });

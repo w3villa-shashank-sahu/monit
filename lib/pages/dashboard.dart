@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:monit/backend/localstorage.dart';
 import 'package:monit/backend/product.dart';
 import 'package:monit/models/product.dart';
 import 'package:monit/models/user.dart';
-import 'package:monit/utils/const.dart';
+import 'package:monit/providers/product_provider.dart';
 import 'package:monit/widgets/card.dart';
+import 'package:monit/widgets/purchase_product.dart';
 import 'package:provider/provider.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -33,7 +34,7 @@ class _DashboardScreenState extends State<DashboardScreen>
   @override
   void initState() {
     super.initState();
-    print('DashboardScreen: initState called - fetching products');
+    // print('DashboardScreen: initState called - fetching products');
     _fetchProducts();
   }
 
@@ -45,6 +46,9 @@ class _DashboardScreenState extends State<DashboardScreen>
 
       final productDb = ProductDatabase();
       final products = await productDb.getProducts();
+      String token = await Localstorage().getToken();
+      if (!mounted) return;
+      await productDb.getUserSelectedProducts(token, context);
 
       // Group products by category
       final categorizedProducts = <String, List<Product>>{};
@@ -138,7 +142,7 @@ class _DashboardScreenState extends State<DashboardScreen>
   AppBar _buildAppBar(ChildModel childModel) {
     return AppBar(
       title: const Text(
-        'Shop',
+        'Menu',
         style: TextStyle(fontWeight: FontWeight.bold),
       ),
       actions: [
@@ -154,7 +158,7 @@ class _DashboardScreenState extends State<DashboardScreen>
               const Icon(Icons.account_balance_wallet, size: 16, color: Colors.blue),
               const SizedBox(width: 4),
               Text(
-                '\$${childModel.balance.toStringAsFixed(2)}',
+                '₹${childModel.balance.toStringAsFixed(2)}',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.blue.shade700,
@@ -163,21 +167,28 @@ class _DashboardScreenState extends State<DashboardScreen>
             ],
           ),
         ),
-        const SizedBox(width: 8),
-
-        // Profile Button
-        InkWell(
-          onTap: () {
-            // Navigate to profile page
-            context.go(MyRoutes.profile);
-          },
-          child: CircleAvatar(
-            radius: 18,
-            backgroundColor: Colors.grey.shade300,
-            child: const Icon(Icons.person, color: Colors.black54),
+        const SizedBox(width: 10),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            color: Colors.red.shade100,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Row(
+            children: [
+              Text('Emergency', style: TextStyle(color: Colors.red.shade700)),
+              const SizedBox(width: 4),
+              Text(
+                '₹${childModel.emergency.balance.toStringAsFixed(2)}',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: const Color.fromARGB(255, 255, 0, 13),
+                ),
+              ),
+            ],
           ),
         ),
-        const SizedBox(width: 16),
+        const SizedBox(width: 10),
       ],
     );
   }
@@ -194,18 +205,14 @@ class _DashboardScreenState extends State<DashboardScreen>
                   runSpacing: 16, // vertical spacing between rows
                   alignment: WrapAlignment.center, // Center items horizontally
                   children: products.map((product) {
-                    return SizedBox(
-                      width: 160, // Fixed width for each card
-                      height: 240, // Fixed height for each card
-                      child: ProductCard(
-                        product: product,
-                        onTap: () {
-                          // Handle product selection
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Selected: ${product.name}')),
-                          );
-                        },
-                      ),
+                    // No SizedBox wrapper - let the ProductCard control its own size
+                    return ProductCard(
+                      product: product,
+                      onTap: () {
+                        // Get the ProductProvider without modifying it yet
+                        final productProvider = Provider.of<ProductProvider>(context, listen: false);
+                        showProductDetailsDialog(product, productProvider, context);
+                      },
                     );
                   }).toList(),
                 ),

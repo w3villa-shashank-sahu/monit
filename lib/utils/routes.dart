@@ -21,7 +21,7 @@ GoRouter router = GoRouter(
         StatefulShellBranch(routes: [
           GoRoute(
             path: MyRoutes.dashboard,
-            builder: (context, state) => const DashboardScreen(keepAlive: true),
+            builder: (context, state) => const DashboardScreen(),
           )
         ]),
         // Profile tab

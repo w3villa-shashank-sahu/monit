@@ -1,6 +1,9 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:monit/models/product.dart';
+import 'package:monit/providers/product_provider.dart';
 import 'package:monit/utils/const.dart';
+import 'package:provider/provider.dart';
 
 class ProductDatabase {
   Future<List<Product>> getProducts() async {
@@ -24,7 +27,7 @@ class ProductDatabase {
         throw Exception('Failed to load products: ${response.statusCode}');
       }
     } catch (e) {
-      print('Error fetching products: $e');
+      // print('Error fetching products: $e');
       // Fallback to mock data if the request fails
       await Future.delayed(Duration(seconds: 2));
       return [
@@ -45,6 +48,31 @@ class ProductDatabase {
             id: '12', name: 'Calculator', price: 12.99, imageUrl: MyConst.defaultProductImage, category: 'Stationery'),
         Product(id: '13', name: 'Lunch Box', price: 9.99, imageUrl: MyConst.defaultProductImage, category: 'Lunch')
       ];
+    }
+  }
+
+  // Get all selected products for a user directly into the product provider
+  Future<void> getUserSelectedProducts(String token, BuildContext context) async {
+    try {
+      final dio = Dio();
+      final response = await dio.get('${MyConst.apiUrl}/users/selectedProducts',
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $token',
+            },
+          ));
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> productsJson = response.data;
+        if (!context.mounted) throw Exception('Context is not mounted');
+        // Update the product provider with the backend data
+        context.read<ProductProvider>().updateFromBackend(productsJson);
+      } else {
+        throw Exception('Failed to load selected products: ${response.statusCode}');
+      }
+    } catch (e) {
+      // print('Error fetching selected products: $e');
+      throw Exception('Failed to fetch selected products: $e');
     }
   }
 }

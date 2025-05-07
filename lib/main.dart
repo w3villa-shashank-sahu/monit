@@ -3,6 +3,7 @@ import 'package:monit/utils/routes.dart';
 import 'package:provider/provider.dart';
 import 'package:monit/models/user.dart';
 import 'package:monit/utils/const.dart';
+import 'package:monit/providers/product_provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,6 +23,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<SpendingLimitModel>(
           create: (_) => SpendingLimitModel(),
+        ),
+        ChangeNotifierProvider<ProductProvider>(
+          create: (_) => ProductProvider(),
         ),
       ],
       child: MaterialApp.router(
