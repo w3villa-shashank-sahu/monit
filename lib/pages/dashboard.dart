@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:monit/backend/localstorage.dart';
 import 'package:monit/backend/product.dart';
 import 'package:monit/models/product.dart';
 import 'package:monit/models/user.dart';
@@ -46,9 +45,8 @@ class _DashboardScreenState extends State<DashboardScreen>
 
       final productDb = ProductDatabase();
       final products = await productDb.getProducts();
-      String token = await Localstorage().getToken();
       if (!mounted) return;
-      await productDb.getUserSelectedProducts(token, context);
+      productDb.getUserSelectedProducts(context);
 
       // Group products by category
       final categorizedProducts = <String, List<Product>>{};

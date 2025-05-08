@@ -4,7 +4,7 @@ import 'package:monit/utils/const.dart';
 
 class Auth {
   Future<String> login(String email, String password) async {
-    return "";
+    return "mytoken";
     // Validate email and password
     if (email.isEmpty || password.isEmpty) {
       return Future.error('Username or password cannot be empty');

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monit/backend/auth.dart';
+import 'package:monit/backend/localstorage.dart';
 import 'package:monit/utils/const.dart';
 import 'package:monit/widgets/button.dart';
 import 'package:monit/widgets/popup.dart';
@@ -34,10 +35,12 @@ class _LoginScreenState extends State<LoginScreen> {
         });
 
         final authService = Auth();
-        await authService.login(
+        String token = await authService.login(
           _emailController.text.trim(),
           _passwordController.text,
         );
+
+        await Localstorage().setToken(token);
 
         // On successful login, navigate to dashboard
         if (mounted) {

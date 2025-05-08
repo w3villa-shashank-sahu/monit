@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:monit/backend/localstorage.dart';
+import 'package:monit/backend/product.dart';
 import 'package:monit/models/product.dart';
 import 'package:monit/providers/product_provider.dart';
 
@@ -191,16 +193,31 @@ void showProductDetailsDialog(Product product, ProductProvider productProvider, 
                         ),
                         const SizedBox(width: 8),
                         ElevatedButton(
-                          onPressed: () {
-                            if (quantity > 0) {
-                              productProvider.addProduct(
-                                product,
-                                quantity: quantity,
-                                selectedDays: selectedDays,
+                          onPressed: () async {
+                            try {
+                              if (quantity > 0) {
+                                productProvider.addProduct(
+                                  product,
+                                  quantity: quantity,
+                                  selectedDays: selectedDays,
+                                );
+                                final token = await Localstorage().getToken();
+                                if (!context.mounted) return;
+                                await ProductDatabase().saveSelectedProducts(token, context);
+                              } else {
+                                productProvider.removeProduct(product.id);
+                              }
+                            } catch (e) {
+                              if (!context.mounted) return;
+                              // Handle error (e.g., show a snackbar or dialog)
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Error: $e'),
+                                  backgroundColor: Colors.red,
+                                ),
                               );
-                            } else {
-                              productProvider.removeProduct(product.id);
                             }
+                            if (!context.mounted) return;
                             Navigator.of(context).pop();
                           },
                           style: ElevatedButton.styleFrom(
