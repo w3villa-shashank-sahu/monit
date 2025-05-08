@@ -3,6 +3,7 @@ import 'package:monit/backend/product.dart';
 import 'package:monit/models/product.dart';
 import 'package:monit/models/user.dart';
 import 'package:monit/providers/product_provider.dart';
+import 'package:monit/widgets/appbar.dart';
 import 'package:monit/widgets/card.dart';
 import 'package:monit/widgets/purchase_product.dart';
 import 'package:provider/provider.dart';
@@ -101,13 +102,13 @@ class _DashboardScreenState extends State<DashboardScreen>
     // If categories are empty, show loading or empty state
     if (_categories.isEmpty && _isLoading) {
       return Scaffold(
-        appBar: _buildAppBar(childModel),
+        appBar: customAppBar(context, 'Menu', childModel),
         body: const Center(child: CircularProgressIndicator()),
       );
     }
 
     return Scaffold(
-      appBar: _buildAppBar(childModel),
+      appBar: customAppBar(context, 'Menu', childModel),
       body: _categories.isEmpty
           ? const Center(child: Text('No products available'))
           : Column(
@@ -134,60 +135,6 @@ class _DashboardScreenState extends State<DashboardScreen>
                 ),
               ],
             ),
-    );
-  }
-
-  AppBar _buildAppBar(ChildModel childModel) {
-    return AppBar(
-      title: const Text(
-        'Menu',
-        style: TextStyle(fontWeight: FontWeight.bold),
-      ),
-      actions: [
-        // Wallet Amount
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          decoration: BoxDecoration(
-            color: Colors.blue.shade100,
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Row(
-            children: [
-              const Icon(Icons.account_balance_wallet, size: 16, color: Colors.blue),
-              const SizedBox(width: 4),
-              Text(
-                '₹${childModel.balance.toStringAsFixed(2)}',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blue.shade700,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(width: 10),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          decoration: BoxDecoration(
-            color: Colors.red.shade100,
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Row(
-            children: [
-              Text('Emergency', style: TextStyle(color: Colors.red.shade700)),
-              const SizedBox(width: 4),
-              Text(
-                '₹${childModel.emergency.balance.toStringAsFixed(2)}',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: const Color.fromARGB(255, 255, 0, 13),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(width: 10),
-      ],
     );
   }
 

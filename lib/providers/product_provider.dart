@@ -189,7 +189,7 @@ class ProductProvider extends ChangeNotifier {
       // Save the JSON string
       await localStorage.setString('selectedProducts', jsonEncode(jsonData));
     } catch (e) {
-      print('Error saving products to localStorage: $e');
+      // print('Error saving products to localStorage: $e');
       throw Exception('Failed to save products to localStorage: $e');
     }
   }
@@ -239,7 +239,7 @@ class ProductProvider extends ChangeNotifier {
 
       notifyListeners();
     } catch (e) {
-      print('Error loading products from localStorage: $e');
+      // print('Error loading products from localStorage: $e');
       throw Exception('Failed to load products from localStorage: $e');
     }
   }

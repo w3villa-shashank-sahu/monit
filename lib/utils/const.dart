@@ -14,6 +14,7 @@ class MyRoutes {
   static const String cart = '/cart';
   static const String checkout = '/checkout';
   static const String usageHistory = '/usage';
+  static const String watchlist = '/watchlist';
 }
 
 class MyConst {

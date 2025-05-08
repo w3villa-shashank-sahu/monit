@@ -127,6 +127,10 @@ class CustomBottomNavBar extends StatelessWidget {
             label: 'Home',
           ),
           BottomNavigationBarItem(
+            icon: Icon(Icons.dashboard),
+            label: 'Watchlist',
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profile',
           ),
@@ -135,6 +139,8 @@ class CustomBottomNavBar extends StatelessWidget {
             label: 'History',
           ),
         ],
+        selectedItemColor: Colors.blue,
+        unselectedItemColor: Colors.grey,
       ),
     );
   }

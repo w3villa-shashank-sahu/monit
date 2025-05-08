@@ -6,6 +6,7 @@ import 'package:monit/pages/authentication/verify.dart';
 import 'package:monit/pages/dashboard.dart';
 import 'package:monit/pages/history.dart';
 import 'package:monit/pages/profile.dart';
+import 'package:monit/pages/watchlist.dart';
 import 'package:monit/utils/const.dart';
 import 'package:monit/widgets/main_layout.dart';
 
@@ -22,6 +23,12 @@ GoRouter router = GoRouter(
           GoRoute(
             path: MyRoutes.dashboard,
             builder: (context, state) => const DashboardScreen(),
+          )
+        ]),
+        StatefulShellBranch(routes: [
+          GoRoute(
+            path: MyRoutes.watchlist,
+            builder: (context, state) => const WatchListScreen(),
           )
         ]),
         // Profile tab
