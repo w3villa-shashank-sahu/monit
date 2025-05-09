@@ -27,6 +27,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<ProductProvider>(
           create: (_) => ProductProvider(),
         ),
+        ChangeNotifierProvider<ParentModel>(
+          create: (_) => ParentModel(),
+        ),
       ],
       child: MaterialApp.router(
         title: MyConst.appName,

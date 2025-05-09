@@ -144,9 +144,43 @@ class UserDatabase {
     }
   }
 
+  final parent = ParentModel(
+    id: 'p1',
+    name: 'John Doe',
+    email: 'john.doe@example.com',
+  );
+  final child = ChildModel(
+    id: '232780',
+    name: 'Shashank Sahu',
+    className: 'MCA',
+    rollNo: '81',
+    balance: 500.0,
+    spendingLimit: SpendingLimitModel(
+      dailyLimit: 50.0,
+      weeklyLimit: 200.0,
+      allowedItemsPerDay: {
+        'Monday': ['Sandwich', 'Juice'],
+        'Tuesday': ['Pizza', 'Water'],
+      },
+    ),
+    emergency: EmergencyModel(
+      emergencyFundLimit: 200.0,
+      usedAmountThisMonth: 50.0,
+      allowedEmergencyItems: ['Medicine', 'Emergency Meal'],
+      lastResetDate: DateTime.now().subtract(Duration(days: 15)),
+    ),
+  );
+
   // Fetch combined parent and children data
   Future<Map<String, dynamic>> fetchCombinedData() async {
     try {
+      // Mock data for testing
+      return {
+        'parentData': parent,
+        'childData': child,
+      };
+
+      /* Commented out actual implementation for now
       final token = await _localStorage.getToken();
 
       // Single API call to get all data
@@ -154,7 +188,7 @@ class UserDatabase {
         '${MyConst.apiUrl}/users/dashboard',
         options: Options(
           headers: {
-            'accept': '*/*',
+            'accept': '*',
             'Authorization': 'Bearer $token',
           },
           contentType: Headers.jsonContentType,
@@ -192,28 +226,12 @@ class UserDatabase {
           lastResetDate: DateTime.parse(child['emergency']['lastResetDate']),
         );
 
-        // Create child model with minimal purchase history
-        List<PurchaseHistoryModel> recentPurchases = [];
-        if (child['recentPurchases'] != null) {
-          for (var purchase in child['recentPurchases']) {
-            recentPurchases.add(PurchaseHistoryModel(
-              id: purchase['id'],
-              itemName: purchase['itemName'],
-              amount: purchase['amount'].toDouble(),
-              dateTime: DateTime.parse(purchase['dateTime']),
-              isEmergency: purchase['isEmergency'],
-              isTeacherAuthorized: purchase['isTeacherAuthorized'],
-            ));
-          }
-        }
-
         children.add(ChildModel(
           id: child['id'],
           name: child['name'],
           className: child['className'],
           rollNo: child['rollNo'],
           balance: child['balance'].toDouble(),
-          purchaseHistory: recentPurchases,
           spendingLimit: spendingLimit,
           emergency: emergency,
         ));
@@ -224,6 +242,7 @@ class UserDatabase {
         'parentData': parentModel,
         'childrenData': children,
       };
+      */
     } catch (e) {
       return Future.error('Failed to fetch combined data: $e');
     }

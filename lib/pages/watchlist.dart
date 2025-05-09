@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:monit/backend/product.dart';
 import 'package:monit/models/product.dart';
 import 'package:monit/models/user.dart';
 import 'package:monit/providers/product_provider.dart';
@@ -21,6 +22,15 @@ class _WatchListScreenState extends State<WatchListScreen> {
   Widget build(BuildContext context) {
     // Get the child model from the provider for wallet info
     final childModel = Provider.of<ChildModel>(context);
+
+    // Get the product provider without rebuilding on changes
+    final productProvider = Provider.of<ProductProvider>(context, listen: false);
+
+    // Only load products from local storage if the provider is empty
+    if (productProvider.selectedProductCount == 0) {
+      final productDb = ProductDatabase();
+      productDb.getUserSelectedProducts(context);
+    }
 
     return Scaffold(
       appBar: customAppBar(context, 'Watchlist', childModel),

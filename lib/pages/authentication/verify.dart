@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:monit/backend/localstorage.dart';
+import 'package:monit/backend/user.dart';
+import 'package:monit/models/user.dart';
 import 'package:monit/utils/const.dart';
+import 'package:provider/provider.dart';
 
 class VerifyScreen extends StatefulWidget {
   const VerifyScreen({super.key});
@@ -27,13 +30,55 @@ class _VerifyScreenState extends State<VerifyScreen> {
       final token = await localStorage.getToken();
 
       if (token.isNotEmpty) {
-        if (mounted) {
-          context.go(MyRoutes.dashboard);
+        ChildModel? childData = await ChildModel.loadFromLocalStorage();
+        ParentModel? parentData = await ParentModel.loadFromLocalStorage();
+        // Navigate to dashboard since we have data
+        if (childData != null && parentData != null && mounted) {
+          // Update the provider with the loaded data
+          Provider.of<ChildModel>(context, listen: false).updateChild(childData);
+          Provider.of<ParentModel>(context, listen: false).updateParent(parentData);
+          if (mounted) {
+            context.go(MyRoutes.dashboard);
+          }
+          return;
         }
+
+        // We have a token but no cached data, so fetch from API
+        final userData = await UserDatabase().fetchCombinedData();
+        if (!mounted) return;
+
+        // Extract data from response
+        if (userData.containsKey('childData') && userData.containsKey('parentData')) {
+          ChildModel child = userData['childData'];
+          ParentModel parent = userData['parentData'];
+
+          print("Child data: ${child.name}, Balance: ${child.balance}");
+          print("Parent data: ${parent.name}, Email: ${parent.email}");
+
+          // Save the data to local storage
+          await child.saveToLocalStorage();
+          await parent.saveToLocalStorage();
+
+          if (!mounted) return;
+          print("Data saved to local storage");
+          // Save the data to provider
+          Provider.of<ChildModel>(context, listen: false).updateChild(child);
+          Provider.of<ParentModel>(context, listen: false).updateParent(parent);
+
+          print("Data updated in provider");
+
+          context.go(MyRoutes.dashboard);
+        } else {
+          print("Error: Missing expected data in API response");
+          if (mounted) {
+            context.go(MyRoutes.login);
+          }
+        }
+
         return;
       }
 
-      // No token or invalid token, navigate to login
+      // No token, navigate to login
       if (mounted) {
         context.go(MyRoutes.login);
       }

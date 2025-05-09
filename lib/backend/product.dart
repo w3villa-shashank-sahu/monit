@@ -8,22 +8,19 @@ import 'package:provider/provider.dart';
 class ProductDatabase {
   Future<List<Product>> getProducts() async {
     return [
-      Product(id: '1', name: 'Sandwich', price: 3.99, imageUrl: MyConst.defaultProductImage, category: 'Lunch'),
-      Product(id: '2', name: 'Salad', price: 4.50, imageUrl: MyConst.defaultProductImage, category: 'Lunch'),
-      Product(id: '3', name: 'Pasta', price: 5.99, imageUrl: MyConst.defaultProductImage, category: 'Lunch'),
-      Product(id: '4', name: 'Chocolate Bar', price: 1.50, imageUrl: MyConst.defaultProductImage, category: 'Snacks'),
-      Product(id: '5', name: 'Chips', price: 1.25, imageUrl: MyConst.defaultProductImage, category: 'Snacks'),
-      Product(id: '6', name: 'Fruit Cup', price: 2.99, imageUrl: MyConst.defaultProductImage, category: 'Snacks'),
-      Product(id: '7', name: 'Notebook', price: 3.99, imageUrl: MyConst.defaultProductImage, category: 'Stationery'),
-      Product(id: '8', name: 'Pen Pack', price: 4.99, imageUrl: MyConst.defaultProductImage, category: 'Stationery'),
-      Product(
-          id: '9', name: 'Highlighters', price: 5.99, imageUrl: MyConst.defaultProductImage, category: 'Stationery'),
-      Product(
-          id: '10', name: 'Pencil Case', price: 6.99, imageUrl: MyConst.defaultProductImage, category: 'Stationery'),
+      Product(id: '1', name: 'Sandwich', price: 30, imageUrl: MyConst.defaultProductImage, category: 'Lunch'),
+      Product(id: '2', name: 'Salad', price: 20, imageUrl: MyConst.defaultProductImage, category: 'Lunch'),
+      Product(id: '3', name: 'Pasta', price: 40, imageUrl: MyConst.defaultProductImage, category: 'Lunch'),
+      Product(id: '4', name: 'Chocolate Bar', price: 10, imageUrl: MyConst.defaultProductImage, category: 'Snacks'),
+      Product(id: '5', name: 'Chips', price: 20, imageUrl: MyConst.defaultProductImage, category: 'Snacks'),
+      Product(id: '6', name: 'Fruit Cup', price: 60, imageUrl: MyConst.defaultProductImage, category: 'Snacks'),
+      Product(id: '7', name: 'Notebook', price: 40, imageUrl: MyConst.defaultProductImage, category: 'Stationery'),
+      Product(id: '8', name: 'Pen Pack', price: 5, imageUrl: MyConst.defaultProductImage, category: 'Stationery'),
+      Product(id: '9', name: 'Highlighters', price: 10, imageUrl: MyConst.defaultProductImage, category: 'Stationery'),
+      Product(id: '10', name: 'Pencil Case', price: 30, imageUrl: MyConst.defaultProductImage, category: 'Stationery'),
       Product(id: '11', name: 'Water Bottle', price: 7.99, imageUrl: MyConst.defaultProductImage, category: 'Snacks'),
-      Product(
-          id: '12', name: 'Calculator', price: 12.99, imageUrl: MyConst.defaultProductImage, category: 'Stationery'),
-      Product(id: '13', name: 'Lunch Box', price: 9.99, imageUrl: MyConst.defaultProductImage, category: 'Lunch')
+      Product(id: '12', name: 'Calculator', price: 120, imageUrl: MyConst.defaultProductImage, category: 'Stationery'),
+      Product(id: '13', name: 'Lunch Box', price: 300, imageUrl: MyConst.defaultProductImage, category: 'Lunch')
     ];
     // try {
     //   final dio = Dio();
@@ -76,6 +73,60 @@ class ProductDatabase {
       }
     } catch (e) {
       throw Exception('Error saving selected products: $e');
+    }
+  }
+
+  Future<List<PurchasedProductModel>> getPurchaseHistory(String token) async {
+    try {
+      // dummy response
+      await Future.delayed(Duration(seconds: 2));
+      return [
+        PurchasedProductModel(
+          id: '1',
+          name: 'Sandwich',
+          amount: 30,
+          imageUrl: MyConst.defaultProductImage,
+          dateTime: DateTime.now().subtract(Duration(days: 3)),
+          isTeacherAuthorized: true,
+        ),
+        PurchasedProductModel(
+          id: '2',
+          name: 'Chips',
+          amount: 20,
+          imageUrl: MyConst.defaultProductImage,
+          dateTime: DateTime.now().subtract(Duration(days: 3)),
+          isTeacherAuthorized: false,
+        ),
+        PurchasedProductModel(
+          id: '3',
+          name: 'Calculator',
+          amount: 120,
+          imageUrl: MyConst.defaultProductImage,
+          dateTime: DateTime.now().subtract(Duration(days: 5)),
+          isTeacherAuthorized: false,
+        ),
+      ];
+
+      final dio = Dio();
+      dio.options.headers['Authorization'] = 'Bearer $token';
+      final response = await dio.get('${MyConst.apiUrl}/purchase-history');
+      if (response.statusCode == 200) {
+        final List<dynamic> purchaseHistoryJson = response.data;
+        return purchaseHistoryJson
+            .map((json) => PurchasedProductModel(
+                  id: json['id'],
+                  name: json['name'],
+                  amount: json['amount'].toDouble(),
+                  imageUrl: json['imageUrl'] ?? MyConst.defaultProductImage,
+                  dateTime: DateTime.parse(json['dateTime']),
+                  isTeacherAuthorized: json['isTeacherAuthorized'] ?? false,
+                ))
+            .toList();
+      } else {
+        throw Exception('Failed to load purchase history: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error fetching purchase history: $e');
     }
   }
 }

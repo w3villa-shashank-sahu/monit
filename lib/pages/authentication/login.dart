@@ -44,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
         // On successful login, navigate to dashboard
         if (mounted) {
-          context.go(MyRoutes.dashboard);
+          context.go(MyRoutes.verify);
         }
       } catch (e) {
         if (mounted) {

@@ -17,3 +17,21 @@ class Product {
     required this.category, // "lunch", "snack", "drink", "stationery"
   });
 }
+
+class PurchasedProductModel {
+  final String id;
+  final String name;
+  final double amount;
+  final String imageUrl;
+  final DateTime dateTime;
+  final bool isTeacherAuthorized;
+
+  PurchasedProductModel({
+    required this.id,
+    required this.name,
+    required this.amount,
+    required this.imageUrl,
+    required this.dateTime,
+    this.isTeacherAuthorized = false,
+  });
+}
