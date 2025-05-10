@@ -144,6 +144,7 @@ class UserDatabase {
     }
   }
 
+  // Mock data for testing
   final parent = ParentModel(
     id: 'p1',
     name: 'John Doe',
@@ -172,7 +173,12 @@ class UserDatabase {
   );
 
   // Fetch combined parent and children data
-  Future<Map<String, dynamic>> fetchCombinedData() async {
+  // return type
+  // return {
+  //       'parentData': parent,
+  //       'childData': child,
+  //     };
+  Future<Map<String, dynamic>> fetchCombinedData(String token) async {
     try {
       // Mock data for testing
       return {

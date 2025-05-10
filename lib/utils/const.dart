@@ -18,7 +18,7 @@ class MyRoutes {
 }
 
 class MyConst {
-  static const String appName = 'MyApp';
+  static const String appName = 'Monit';
   static const String appVersion = '1.0.0';
   static const String apiUrl = 'https://api.example.com';
   static const String defaultProfileImage = 'assets/images/profile.png';

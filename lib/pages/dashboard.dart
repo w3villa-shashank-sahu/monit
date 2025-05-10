@@ -102,13 +102,13 @@ class _DashboardScreenState extends State<DashboardScreen>
     // If categories are empty, show loading or empty state
     if (_categories.isEmpty && _isLoading) {
       return Scaffold(
-        appBar: customAppBar(context, 'Menu', childModel),
+        appBar: customAppBar(context, 'Monit', childModel),
         body: const Center(child: CircularProgressIndicator()),
       );
     }
 
     return Scaffold(
-      appBar: customAppBar(context, 'Menu', childModel),
+      appBar: customAppBar(context, 'Monit', childModel),
       body: _categories.isEmpty
           ? const Center(child: Text('No products available'))
           : Column(

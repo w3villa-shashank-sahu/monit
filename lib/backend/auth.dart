@@ -3,6 +3,7 @@ import 'package:monit/backend/localstorage.dart';
 import 'package:monit/utils/const.dart';
 
 class Auth {
+  // return token
   Future<String> login(String email, String password) async {
     return "mytoken";
     // Validate email and password

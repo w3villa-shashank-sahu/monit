@@ -41,7 +41,7 @@ AppBar customAppBar(BuildContext context, String title, dynamic childModel) {
         ),
         child: Row(
           children: [
-            const Icon(Icons.emergency, size: 14, color: Colors.red),
+            const Icon(Icons.warning_amber, size: 14, color: Colors.red),
             const SizedBox(width: 3),
             Text(
               '₹${childModel.emergency.balance.toStringAsFixed(0)}',

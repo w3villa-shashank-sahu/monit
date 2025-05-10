@@ -44,7 +44,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
         }
 
         // We have a token but no cached data, so fetch from API
-        final userData = await UserDatabase().fetchCombinedData();
+        final userData = await UserDatabase().fetchCombinedData(token);
         if (!mounted) return;
 
         // Extract data from response
