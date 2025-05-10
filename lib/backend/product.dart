@@ -8,10 +8,10 @@ import 'package:provider/provider.dart';
 class ProductDatabase {
   Future<List<Product>> getProducts() async {
     return [
-      Product(id: '1', name: 'Sandwich', price: 30, imageUrl: MyConst.defaultProductImage, category: 'Lunch'),
+      Product(id: '1', name: 'Pizza', price: 300, imageUrl: MyConst.defaultProductImage, category: 'Lunch'),
       Product(id: '2', name: 'Salad', price: 20, imageUrl: MyConst.defaultProductImage, category: 'Lunch'),
       Product(id: '3', name: 'Pasta', price: 40, imageUrl: MyConst.defaultProductImage, category: 'Lunch'),
-      Product(id: '4', name: 'Chocolate Bar', price: 10, imageUrl: MyConst.defaultProductImage, category: 'Snacks'),
+      Product(id: '4', name: 'Chai', price: 10, imageUrl: MyConst.defaultProductImage, category: 'Snacks'),
       Product(id: '5', name: 'Chips', price: 20, imageUrl: MyConst.defaultProductImage, category: 'Snacks'),
       Product(id: '6', name: 'Fruit Cup', price: 60, imageUrl: MyConst.defaultProductImage, category: 'Snacks'),
       Product(id: '7', name: 'Notebook', price: 40, imageUrl: MyConst.defaultProductImage, category: 'Stationery'),

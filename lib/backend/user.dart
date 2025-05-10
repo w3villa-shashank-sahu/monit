@@ -155,7 +155,7 @@ class UserDatabase {
     name: 'Shashank Sahu',
     className: 'MCA',
     rollNo: '81',
-    balance: 500.0,
+    balance: 10000.0,
     spendingLimit: SpendingLimitModel(
       dailyLimit: 50.0,
       weeklyLimit: 200.0,
@@ -165,7 +165,7 @@ class UserDatabase {
       },
     ),
     emergency: EmergencyModel(
-      emergencyFundLimit: 200.0,
+      emergencyFundLimit: 1000.0,
       usedAmountThisMonth: 50.0,
       allowedEmergencyItems: ['Medicine', 'Emergency Meal'],
       lastResetDate: DateTime.now().subtract(Duration(days: 15)),

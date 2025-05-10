@@ -75,7 +75,7 @@ class ChildModel extends ChangeNotifier {
     this.name = '',
     this.className = '',
     this.rollNo = '',
-    this.balance = 1000.0,
+    this.balance = 10000.0,
     SpendingLimitModel? spendingLimit,
     EmergencyModel? emergency,
   })  : spendingLimit = spendingLimit ?? SpendingLimitModel(),
@@ -235,7 +235,7 @@ class EmergencyModel {
   EmergencyModel({
     this.emergencyFundLimit = 0.0,
     this.usedAmountThisMonth = 0.0,
-    this.balance = 200.0,
+    this.balance = 1000.0,
     List<String>? allowedEmergencyItems,
     DateTime? lastResetDate,
   })  : allowedEmergencyItems = allowedEmergencyItems ?? [],
